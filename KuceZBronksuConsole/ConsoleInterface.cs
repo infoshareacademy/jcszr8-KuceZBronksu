@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,9 @@ namespace KuceZBronksuConsole
     {
         private int SelectedIndex;
         private string[] Options;
-        private string Prompt;
-        public ConsoleInterface(string[] options, string prompt)
+        private string[] Prompt;
+        private string title = "Aplikacja kulinarna"; /* title of aplication*/
+        public ConsoleInterface(string[] options, string[] prompt)
         {
             Options = options;
             Prompt = prompt;
@@ -20,24 +22,33 @@ namespace KuceZBronksuConsole
         }
         private void DisplayOptions()
         {
-            Console.WriteLine(Prompt);
+            
+            var defaultColorMain = Console.ForegroundColor;    /*default console foreground color variable for these people who customzie his console*/
+            var defaultColorSecond = Console.BackgroundColor;    /*default console background color variable for these people who customzie his console*/
+            
+            foreach (var line in Prompt)
+            {
+                Console.WriteLine(line);
+            }
+            
             for(int i = 0; i < Options.Length; i++)
             {
                 string currentoption = Options[i];
                 string prefix;
                 if( i == SelectedIndex)
                 {
-                    prefix = "*";
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.BackgroundColor = ConsoleColor.White;
+                    prefix = " <--";
+                    Console.ForegroundColor = defaultColorSecond;
+                    Console.BackgroundColor = defaultColorMain;
                 }
                 else
                 {
-                    prefix = " ";
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Black;
+                    
+                    prefix = "";
+                    Console.ForegroundColor = defaultColorMain;
+                    Console.BackgroundColor = defaultColorSecond;
                 }
-                Console.WriteLine($"{prefix}<<{currentoption}>>");
+                Console.WriteLine($"{currentoption}{prefix}");
             }
             Console.ResetColor();
         }
@@ -46,6 +57,7 @@ namespace KuceZBronksuConsole
             ConsoleKey keypressed;
             do
             {
+                Console.Title = title;
                 Console.Clear();
                 DisplayOptions();
                 ConsoleKeyInfo Keyinfo = Console.ReadKey(true);
